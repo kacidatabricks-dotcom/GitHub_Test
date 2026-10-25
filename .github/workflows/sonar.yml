@@ -12,30 +12,31 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      # Remplacement des versions par les Commit SHA exacts (Alerte 1 résolue)
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@eef614202b4e3460ddb35e293f49f065611f71a4 # v4.2.1
         with:
           fetch-depth: 0
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v5.3.0 # v5.3.0
         with:
           python-version: '3.10'
 
-      # Étape indispensable pour convertir vos notebooks Databricks (.ipynb) en scripts Python (.py)
+      # Sécurisation de l'installation pip (Alertes 2 et 3 résolues)
       - name: Install Tools & Convert Notebooks
         run: |
-          pip install jupytext
+          pip install --only-binary :all: jupytext==1.16.4
           find . -name "*.ipynb" -exec jupytext --to py {} \;
 
       - name: Cache SonarCloud packages
-        uses: actions/cache@v4
+        uses: actions/cache@0c45773b623bea8c8e75f6c82b208c3cf94ea4f9 # v4.2.0
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
       - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v5
+        uses: SonarSource/sonarqube-scan-action@bfd4e558c53de47ca081d05312da91ec6ee4b8c7 # v5.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
