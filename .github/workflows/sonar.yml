@@ -40,3 +40,4 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@bfd4e558c53de47ca081d05312da91ec6ee4b8c7 # v5.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
